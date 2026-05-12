@@ -195,6 +195,50 @@
       object-fit: contain;
       display: block;
       padding: 42px;
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      transition: opacity 0.38s ease, transform 0.38s ease;
+      will-change: opacity, transform;
+    }
+
+    .main-image-area img.is-changing-next {
+      opacity: 0;
+      transform: translateX(-18px) scale(0.985);
+    }
+
+    .main-image-area img.is-changing-prev {
+      opacity: 0;
+      transform: translateX(18px) scale(0.985);
+    }
+
+    .main-image-area img.is-entering-next {
+      animation: imageEnterNext 0.42s ease both;
+    }
+
+    .main-image-area img.is-entering-prev {
+      animation: imageEnterPrev 0.42s ease both;
+    }
+
+    @keyframes imageEnterNext {
+      from {
+        opacity: 0;
+        transform: translateX(18px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    @keyframes imageEnterPrev {
+      from {
+        opacity: 0;
+        transform: translateX(-18px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
     }
 
     .gallery-nav {
@@ -306,9 +350,8 @@
       border: 1px solid rgba(0,0,0,0.12);
     }
 
-    .swatch-black span { background: #0c0c0c; }
-    .swatch-gray span { background: #b8b8b8; }
-    .swatch-cream span { background: #e8e3dc; }
+    .swatch-gray span { background: #8c847d; }
+    .swatch-beige span { background: #d9c3a3; }
 
     .size-row {
       display: flex;
@@ -634,7 +677,7 @@
       </div>
 
       <a class="brand" href="#" aria-label="LIUTIK home">
-        <img class="brand-logo" src="logo.png" alt="liutik" />
+        <img class="brand-logo" src="logo.PNG" alt="liutik" />
       </a>
 
       <div class="header-right">
@@ -706,11 +749,10 @@
         <p class="status">Coming soon</p>
 
         <div class="option-block">
-          Color: <strong>concept</strong>
-          <div class="swatches" aria-label="Concept color options">
-            <button class="swatch swatch-black" aria-label="Black concept"><span></span></button>
-            <button class="swatch swatch-gray" aria-label="Grey concept"><span></span></button>
-            <button class="swatch swatch-cream" aria-label="Custom concept"><span></span></button>
+          Color: <strong>grey / beige</strong>
+          <div class="swatches" aria-label="Garment color options">
+            <button class="swatch swatch-gray" aria-label="Grey"><span></span></button>
+            <button class="swatch swatch-beige" aria-label="Beige"><span></span></button>
           </div>
         </div>
 
@@ -800,16 +842,20 @@
   <script>
     /*
       Файлы должны лежать в одной папке с этим HTML:
+      - logo.PNG
       - coat.png
       - pants.png
+      - pose1.png
+      - pose2.png
+      - pose3.png
     */
 
     const productImages = [
       'coat.png',
       'pants.png',
-      'pos1.png',
-      'pos2.png',
-      'pos3.png'
+      'pose1.png',
+      'pose2.png',
+      'pose3.png'
     ];
 
     const mainImage = document.getElementById('mainImage');
@@ -835,31 +881,41 @@
 
         button.appendChild(image);
         button.addEventListener('click', () => {
-          activeIndex = index;
-          updateMainImage();
-          renderGallery();
+          const direction = index > activeIndex ? 'next' : 'prev';
+          showImage(index, direction);
         });
 
         thumbs.appendChild(button);
       });
     }
 
-    function updateMainImage() {
+    function updateMainImage(direction = 'next') {
       mainImage.src = productImages[activeIndex];
+      mainImage.classList.remove('is-changing-next', 'is-changing-prev', 'is-entering-next', 'is-entering-prev');
+      void mainImage.offsetWidth;
+      mainImage.classList.add(direction === 'prev' ? 'is-entering-prev' : 'is-entering-next');
     }
 
-    function showImage(index) {
-      activeIndex = (index + productImages.length) % productImages.length;
-      updateMainImage();
-      renderGallery();
+    function showImage(index, direction = 'next') {
+      if (index === activeIndex) return;
+
+      const exitClass = direction === 'prev' ? 'is-changing-prev' : 'is-changing-next';
+      mainImage.classList.remove('is-entering-next', 'is-entering-prev');
+      mainImage.classList.add(exitClass);
+
+      setTimeout(() => {
+        activeIndex = (index + productImages.length) % productImages.length;
+        updateMainImage(direction);
+        renderGallery();
+      }, 180);
     }
 
     function nextImage() {
-      showImage(activeIndex + 1);
+      showImage(activeIndex + 1, 'next');
     }
 
     function prevImage() {
-      showImage(activeIndex - 1);
+      showImage(activeIndex - 1, 'prev');
     }
 
     prevButton.addEventListener('click', prevImage);
