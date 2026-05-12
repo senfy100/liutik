@@ -91,14 +91,17 @@
     }
 
     .brand {
-      text-align: center;
-      line-height: 0.82;
-      letter-spacing: -0.09em;
-      font-family: Georgia, 'Times New Roman', serif;
-      font-weight: 700;
-      font-size: clamp(38px, 4vw, 54px);
-      color: var(--black);
-      transform: translateY(-2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translateY(-4px);
+    }
+
+    .brand-logo {
+      display: block;
+      width: clamp(92px, 9vw, 145px);
+      height: auto;
+      object-fit: contain;
     }
 
     .breadcrumbs {
@@ -303,8 +306,9 @@
       border: 1px solid rgba(0,0,0,0.12);
     }
 
-    .swatch-gray span { background: #8c847d; }
-    .swatch-beige span { background: #d9c3a3; }
+    .swatch-black span { background: #0c0c0c; }
+    .swatch-gray span { background: #b8b8b8; }
+    .swatch-cream span { background: #e8e3dc; }
 
     .size-row {
       display: flex;
@@ -498,8 +502,8 @@
         display: none;
       }
 
-      .brand {
-        font-size: 36px;
+      .brand-logo {
+        width: 98px;
       }
 
       .breadcrumbs {
@@ -567,8 +571,8 @@
         height: 20px;
       }
 
-      .brand {
-        font-size: 31px;
+      .brand-logo {
+        width: 86px;
       }
 
       .breadcrumbs {
@@ -629,7 +633,9 @@
         </button>
       </div>
 
-      <a class="brand" href="#" aria-label="LIUTIK home">liutik</a>
+      <a class="brand" href="#" aria-label="LIUTIK home">
+        <img class="brand-logo" src="logo.png" alt="liutik" />
+      </a>
 
       <div class="header-right">
         <button aria-label="Profile">
@@ -700,10 +706,11 @@
         <p class="status">Coming soon</p>
 
         <div class="option-block">
-          Color: <strong>grey / beige</strong>
-          <div class="swatches" aria-label="Garment color options">
-            <button class="swatch swatch-gray" aria-label="Grey"><span></span></button>
-            <button class="swatch swatch-beige" aria-label="Beige"><span></span></button>
+          Color: <strong>concept</strong>
+          <div class="swatches" aria-label="Concept color options">
+            <button class="swatch swatch-black" aria-label="Black concept"><span></span></button>
+            <button class="swatch swatch-gray" aria-label="Grey concept"><span></span></button>
+            <button class="swatch swatch-cream" aria-label="Custom concept"><span></span></button>
           </div>
         </div>
 
@@ -800,9 +807,9 @@
     const productImages = [
       'coat.png',
       'pants.png',
-      'pose1.png',
-      'pose2.png',
-      'pose3.png'
+      'pos1.png',
+      'pos2.png',
+      'pos3.png'
     ];
 
     const mainImage = document.getElementById('mainImage');
